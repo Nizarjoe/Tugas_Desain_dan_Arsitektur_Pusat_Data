@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Deploy Aplikasi Web Cloud (PaaS) — Dashboard Analitik & Arsitektur Pusat Data</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <meta name="description" content="Proyek akademis: Web App PaaS berbasis GitHub Pages, dashboard analitik simulasi, penjelasan arsitektur pusat data dan keamanan cloud.">
+  <style>
+    :root{
+      --brand-blue:#0d6efd;
+      --brand-dark:#073b6b;
+      --muted:#6c757d;
+      --card-bg:#f8fafc;
+    }
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#f7fbff 0%, #ffffff 100%);
+      color:#0b2947;
+    }
+    .hero{
+      background: linear-gradient(90deg, rgba(13,110,253,0.06), rgba(7,59,107,0.03));
+      border-left: 4px solid var(--brand-blue);
+      padding: 28px;
+      border-radius: 8px;
+    }
+    .badge-cloud{
+      background: linear-gradient(90deg,#e7f1ff,#fff);
+      color: var(--brand-dark);
+      border:1px solid #dbeefc;
+      font-weight:600;
+    }
+    .architecture-box{
+      background: white;
+      border-radius:8px;
+      padding:14px;
+      box-shadow: 0 6px 18px rgba(10,40,80,0.04);
+      border-left:4px solid var(--brand-blue);
+    }
+    .flow{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+    }
+    .flow .node{
+      width:95%;
+      max-width:760px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      border-radius:8px;
+      background: linear-gradient(180deg,#ffffff,#fbfdff);
+      border:1px solid #e6f0ff;
+    }
+    .arrow{
+      width:2px;
+      height:22px;
+      background: linear-gradient(180deg,#dbeeff,#ffffff);
+      position:relative;
+    }
+    .arrow:after{
+      content:'';
+      width:0;height:0;
+      border-left:6px solid transparent;
+      border-right:6px solid transparent;
+      border-top:8px solid #e6f0ff;
+      position:absolute;
+      bottom:-8px;
+      left:-6px;
+    }
+    .check-yes{ color:green; font-weight:700; }
+    .explain { font-size:0.94rem; color:var(--muted); }
+    footer{ font-size:0.9rem; color:var(--muted); padding-top:20px; }
+    /* Responsive chart grid */
+    .charts-grid{ display:grid; gap:18px; grid-template-columns: 1fr; }
+    @media(min-width:992px){ .charts-grid{ grid-template-columns: 1fr 1fr; } }
+    .chart-card{ background:var(--card-bg); border-radius:10px; padding:14px; border:1px solid #e8eef9; }
+    /* Small visual flourish for badges */
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#f1f7ff; color:var(--brand-dark); font-weight:600; border:1px solid #e1efff; }
+    /* Academic color emphasis */
+    h1,h2{ color:var(--brand-dark); }
+    code.inline{ background:#eef6ff; padding:2px 6px; border-radius:6px; font-weight:600; color:var(--brand-dark); }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <!-- HERO SECTION – IDENTITAS AKADEMIS -->
+    <header class="mb-4 hero">
+      <div class="d-flex justify-content-between align-items-start flex-column flex-md-row gap-3">
+        <div>
+          <h1 class="mb-1">Deploy Aplikasi Web Cloud (PaaS) — Dashboard & Arsitektur Pusat Data</h1>
+          <div class="mb-2">
+            <span class="badge pill"><i class="fa-solid fa-graduation-cap"></i> Mata Kuliah: Desain & Arsitektur Pusat Data</span>
+            <span class="badge pill ms-2"><i class="fa-solid fa-database"></i> Program Studi: Sains Data</span>
+          </div>
+          <p class="explain mb-0">
+            Tema: Implementasi Web Application berbasis PaaS yang menjelaskan arsitektur pusat data, keamanan, dan menampilkan dashboard analitik simulasi — seluruhnya berjalan client-side (1 file HTML).
+          </p>
+        </div>
+
+        <div class="text-md-end">
+          <div class="mb-2">
+            <span class="badge badge-cloud me-2"><i class="fa-solid fa-lock"></i> HTTPS / SSL</span>
+            <span class="badge badge-cloud"><i class="fa-solid fa-cloud"></i> PaaS</span>
+          </div>
+          <div class="explain">Siap di-host: <strong>GitHub Pages (HTTPS aktif)</strong></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- DESKRIPSI PROYEK (NARASI TEKNIS) -->
+    <section class="mb-4">
+      <h2>Deskripsi Singkat (Narasi Teknis)</h2>
+      <p class="explain">
+        Masalah komputasi konvensional: beban pengelolaan infrastruktur, keterbatasan elastisitas, dan biaya awal tinggi untuk penyediaan server fisik.
+        Solusi cloud computing: menyediakan abstraksi sumber daya (compute, networking, storage) yang elastis, tersedia melalui layanan terkelola (PaaS), memungkinkan fokus pada aplikasi dan data.
+        Relevansi dengan pusat data modern: pusat data modern mengandalkan virtualisasi, orkestrasi, dan CDN untuk performa global serta model tanggung jawab bersama antara penyedia cloud dan pengguna.
+      </p>
+    </section>
+
+    <!-- ARSITEKTUR PUSAT DATA CLOUD -->
+    <section class="mb-4">
+      <h2>Arsitektur Pusat Data Cloud</h2>
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <div class="architecture-box">
+            <div class="flow">
+              <div class="node"><i class="fa-solid fa-user fa-lg text-primary"></i><div><strong>User</strong><div class="explain">Pengguna akhir (browser) mengakses aplikasi melalui internet.</div></div></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="node"><i class="fa-solid fa-globe fa-lg text-primary"></i><div><strong>Internet</strong><div class="explain">Jalur publik yang membawa request ke CDN / hosting.</div></div></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="node"><i class="fa-solid fa-network-wired fa-lg text-primary"></i><div><strong>CDN + SSL (GitHub Pages)</strong><div class="explain">Konten statis terdistribusi; TLS/HTTPS aktif untuk enkripsi end-to-end.</div></div></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="node"><i class="fa-solid fa-server fa-lg text-primary"></i><div><strong>PaaS Hosting Environment</strong><div class="explain">Platform terkelola (GitHub Pages sebagai PaaS level statis) mengabstraksi infrastruktur fisik.</div></div></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="node"><i class="fa-solid fa-laptop-code fa-lg text-primary"></i><div><strong>Client-side Data Processing</strong><div class="explain">Semua logika analitik berjalan di browser (no backend), data simulasi & pemrosesan diselesaikan client-side.</div></div></div>
+              <div class="arrow" aria-hidden="true"></div>
+              <div class="node"><i class="fa-solid fa-chart-simple fa-lg text-primary"></i><div><strong>Visualization Layer (Chart.js)</strong><div class="explain">Visualisasi interaktif untuk monitoring, berbasis library JS yang dimuat via CDN.</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="architecture-box">
+            <h5>Konsep- konsep penting</h5>
+            <ul>
+              <li><strong>Availability:</strong> CDN + PaaS meminimalkan downtime untuk konten statis; multiple edge node meningkatkan ketersediaan.</li>
+              <li><strong>Scalability:</strong> Layanan PaaS dan CDN secara transparan menskalakan distribusi konten sesuai trafik.</li>
+              <li><strong>Fault tolerance:</strong> Replikasi di edge nodes dan caching mengurangi dampak kegagalan pusat data tunggal.</li>
+              <li><strong>Resource abstraction:</strong> PaaS menyembunyikan detail hardware; developer berfokus pada aplikasi dan data.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA ANALYTICS DASHBOARD -->
+    <section class="mb-4">
+      <h2>Data Analytics Dashboard (Simulasi)</h2>
+      <p class="explain">Dashboard berikut mensimulasikan metrik yang biasa dimonitor pada pusat data cloud: traffic, penggunaan resource, dan distribusi beban. Semua data dihasilkan dan diproses di sisi client (browser).</p>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h5 class="mb-2">Line Chart — Traffic Cloud (Requests per menit)</h5>
+          <canvas id="chartTraffic" height="140"></canvas>
+          <p class="explain mt-2"><strong>Makna:</strong> Pola trafik menunjukkan fluktuasi permintaan client. Lonjakan dapat menandakan event, deployment, atau serangan DDoS. Monitoring membantu autoscaling dan kapasitas CDN.</p>
+        </div>
+
+        <div class="chart-card">
+          <h5 class="mb-2">Bar Chart — Resource Usage (Simulasi CPU, Memory, I/O)</h5>
+          <canvas id="chartResource" height="140"></canvas>
+          <p class="explain mt-2"><strong>Makna:</strong> Perbandingan penggunaan sumber daya membantu mengidentifikasi bottleneck (mis. CPU-bound vs memory-bound). Dalam lingkungan PaaS, metrik ini membantu penyedia menentukan limits dan quotas.</p>
+        </div>
+
+        <div class="chart-card">
+          <h5 class="mb-2">Pie Chart — Load Distribution (Region / Service)</h5>
+          <canvas id="chartLoad" height="140"></canvas>
+          <p class="explain mt-2"><strong>Makna:</strong> Distribusi beban antar region atau service menunjukkan di mana replikasi dan caching perlu dioptimalkan untuk latency dan cost efficiency.</p>
+        </div>
+
+        <div class="chart-card">
+          <h5 class="mb-2">Kontrol Simulasi</h5>
+          <p class="explain">Gunakan tombol untuk mereset atau randomize data simulasi berikut untuk demo cepat.</p>
+          <div class="d-flex gap-2">
+            <button id="btnRandom" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-shuffle"></i> Randomize</button>
+            <button id="btnSpike" class="btn btn-outline-warning btn-sm"><i class="fa-solid fa-exclamation-triangle"></i> Inject Spike</button>
+            <button id="btnReset" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEAMANAN CLOUD (WAJIB DIJELASKAN) -->
+    <section class="mb-4">
+      <h2>Keamanan Cloud</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="architecture-box">
+            <h6>HTTPS / SSL</h6>
+            <p class="explain">Transport Layer Security (TLS) melindungi integritas dan kerahasiaan data antara pengguna dan CDN/hosting. GitHub Pages menyediakan sertifikat TLS otomatis untuk domain github.io dan custom domain via Let's Encrypt — memastikan enkripsi end-to-end.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="architecture-box">
+            <h6>Isolasi Platform & Tidak adanya exposed backend</h6>
+            <p class="explain">Aplikasi ini adalah statis (front-end-only). Tidak ada endpoint backend yang terekspos — mengurangi permukaan serangan. PaaS dan CDN memberikan lapisan isolasi dari hardware fisik dan layanan lain di multi-tenant environment.</p>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="architecture-box">
+            <h6>Shared Responsibility Model</h6>
+            <p class="explain">Dalam model tanggung jawab bersama, penyedia cloud (GitHub Pages/CDN) bertanggung jawab atas keamanan infrastruktur fisik, jaringan, dan TLS, sedangkan pengguna bertanggung jawab atas konten aplikasi, konfigurasi DNS/domain, serta kontrol akses ke repositori sumber.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAPPING KE KETENTUAN PROYEK -->
+    <section class="mb-4">
+      <h2>Mapping ke Ketentuan Proyek</h2>
+      <div class="architecture-box">
+        <table class="table table-borderless mb-0">
+          <thead>
+            <tr>
+              <th width="60%">Kriteria</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tema proyek (Arsitektur Pusat Data & Cloud)</td>
+              <td class="text-success"><i class="fa-solid fa-check"></i> ✔</td>
+            </tr>
+            <tr>
+              <td>Platform cloud (PaaS via GitHub Pages)</td>
+              <td class="text-success"><i class="fa-solid fa-check"></i> ✔</td>
+            </tr>
+            <tr>
+              <td>Layanan yang digunakan (PaaS / CDN / TLS)</td>
+              <td class="text-success"><i class="fa-solid fa-check"></i> ✔</td>
+            </tr>
+            <tr>
+              <td>Mekanisme keamanan (HTTPS, isolasi, shared responsibility)</td>
+              <td class="text-success"><i class="fa-solid fa-check"></i> ✔</td>
+            </tr>
+            <tr>
+              <td>Bentuk aplikasi (1 file HTML, client-side only)</td>
+              <td class="text-success"><i class="fa-solid fa-check"></i> ✔</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="explain mb-0 mt-3"><strong>Catatan:</strong> Semua batasan teknis dipenuhi: satu file HTML, tanpa backend, tanpa database eksternal, tanpa API berbayar — cocok untuk demo akademis dan sidang.</p>
+      </div>
+    </section>
+
+    <!-- FOOTER AKADEMIS -->
+    <footer class="mt-4">
+      <div class="row">
+        <div class="col-md-8">
+          <strong>Nama Mahasiswa:</strong> [Nama Anda di sini]<br>
+          <strong>Program Studi:</strong> Sains Data<br>
+          <strong>Tahun:</strong> 2026<br>
+          <strong>Mata Kuliah:</strong> Desain & Arsitektur Pusat Data
+        </div>
+        <div class="col-md-4 text-md-end">
+          <small class="explain">File: <code class="inline">index.html</code> — siap di-push ke repositori GitHub, lalu aktifkan GitHub Pages (branch: main / gh-pages) untuk melihat pada HTTPS.</small>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // ============================================================
+    // Simulasi & Visualisasi (Client-side only)
+    // Semua data dihasilkan di browser — tidak ada backend.
+    // Komentar berikut menjelaskan makna akademis metrik,
+    // serta relevansinya terhadap monitoring pusat data cloud.
+    // ============================================================
+
+    // Utility: generate sequential labels (waktu simulasi)
+    function genLabels(count){
+      const labels = [];
+      const now = new Date();
+      for(let i = count-1; i >= 0; i--){
+        const t = new Date(now - i*60000); // per menit
+        labels.push(t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0'));
+      }
+      return labels;
+    }
+
+    // Generate baseline traffic with noise
+    function generateTrafficPoints(n, base=120, volatility=40){
+      const points = [];
+      for(let i=0;i<n;i++){
+        // Akademis: model sederhana yang mensimulasikan trafik sebagai proses stokastik
+        const noise = (Math.sin(i/3)*0.5 + Math.random()*0.8) * volatility;
+        points.push(Math.max(5, Math.round(base + noise)));
+      }
+      return points;
+    }
+
+    // Generate resource usage for CPU/Memory/IO
+    function generateResource(n){
+      // Return avg values in %
+      return [
+        Array.from({length:n}, ()=>Math.round(30 + Math.random()*50)), // CPU
+        Array.from({length:n}, ()=>Math.round(20 + Math.random()*60)), // Mem
+        Array.from({length:n}, ()=>Math.round(10 + Math.random()*40))  // IO
+      ];
+    }
+
+    // Generate load distribution
+    function generateLoadDistribution(){
+      // Simulasi persentase traffic per region/service
+      const a = Math.random()*40 + 20;
+      const b = Math.random()*30 + 10;
+      const c = Math.random()*30 + 5;
+      const rest = Math.max(0, 100 - (a+b+c));
+      return [Math.round(a), Math.round(b), Math.round(c), Math.round(rest)];
+    }
+
+    // Initial data
+    const POINTS = 12;
+    let labels = genLabels(POINTS);
+    let traffic = generateTrafficPoints(POINTS, 120, 45);
+    let [cpuRows, memRows, ioRows] = generateResource(POINTS);
+    let loadDist = generateLoadDistribution();
+
+    // Chart: Traffic (Line)
+    const ctxTraffic = document.getElementById('chartTraffic').getContext('2d');
+    const chartTraffic = new Chart(ctxTraffic, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Requests / menit',
+          data: traffic,
+          borderColor: 'rgba(13,110,253,0.95)',
+          backgroundColor: 'rgba(13,110,253,0.12)',
+          tension: 0.28,
+          pointRadius:3,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive:true,
+        plugins: {
+          legend:{display:false},
+          tooltip:{mode:'index', intersect:false}
+        },
+        scales:{
+          y: { beginAtZero:true, title:{display:true, text:'Requests / menit'} }
+        }
+      }
+    });
+
+    // Chart: Resource (Bar grouped)
+    const ctxResource = document.getElementById('chartResource').getContext('2d');
+    const chartResource = new Chart(ctxResource, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'CPU (%)', data: cpuRows, backgroundColor: 'rgba(13,110,253,0.9)', stack:'s1' },
+          { label: 'Memory (%)', data: memRows, backgroundColor: 'rgba(3,155,229,0.75)', stack:'s1' },
+          { label: 'I/O (%)', data: ioRows, backgroundColor: 'rgba(108,117,125,0.9)', stack:'s1' }
+        ]
+      },
+      options:{
+        responsive:true,
+        plugins:{ legend:{position:'top'} },
+        scales:{
+          y: { beginAtZero:true, max:100, title:{display:true, text:'Utilization (%)'} }
+        }
+      }
+    });
+
+    // Chart: Load Distribution (Pie)
+    const ctxLoad = document.getElementById('chartLoad').getContext('2d');
+    const chartLoad = new Chart(ctxLoad, {
+      type: 'pie',
+      data: {
+        labels: ['Region A','Region B','Region C','Other'],
+        datasets: [{
+          data: loadDist,
+          backgroundColor: ['#0d6efd','#198754','#fd7e14','#6c757d']
+        }]
+      },
+      options:{
+        responsive:true,
+        plugins:{ legend:{position:'right'} }
+      }
+    });
+
+    // Interaction controls: randomize / spike / reset
+    document.getElementById('btnRandom').addEventListener('click', ()=>{
+      labels = genLabels(POINTS);
+      traffic = generateTrafficPoints(POINTS, Math.round(80 + Math.random()*120), Math.round(30 + Math.random()*50));
+      [cpuRows, memRows, ioRows] = generateResource(POINTS);
+      loadDist = generateLoadDistribution();
+
+      chartTraffic.data.labels = labels;
+      chartTraffic.data.datasets[0].data = traffic;
+      chartTraffic.update();
+
+      chartResource.data.labels = labels;
+      chartResource.data.datasets[0].data = cpuRows;
+      chartResource.data.datasets[1].data = memRows;
+      chartResource.data.datasets[2].data = ioRows;
+      chartResource.update();
+
+      chartLoad.data.datasets[0].data = loadDist;
+      chartLoad.update();
+    });
+
+    document.getElementById('btnSpike').addEventListener('click', ()=>{
+      // Inject sudden spike in the latest traffic point to simulate event
+      const spikeValue = Math.max(...traffic) * (1.6 + Math.random()*1.2);
+      traffic = traffic.slice(1).concat(Math.round(spikeValue));
+      // CPU/Memory respond to spike (simple model)
+      cpuRows = cpuRows.slice(1).concat(Math.min(100, Math.round(cpuRows[cpuRows.length-1]*1.3)));
+      memRows = memRows.slice(1).concat(Math.min(100, Math.round(memRows[memRows.length-1]*1.15)));
+      ioRows = ioRows.slice(1).concat(Math.min(100, Math.round(ioRows[ioRows.length-1]*1.25)));
+
+      chartTraffic.data.datasets[0].data = traffic;
+      chartTraffic.data.labels = genLabels(POINTS);
+      chartTraffic.update();
+
+      chartResource.data.datasets[0].data = cpuRows;
+      chartResource.data.datasets[1].data = memRows;
+      chartResource.data.datasets[2].data = ioRows;
+      chartResource.update();
+    });
+
+    document.getElementById('btnReset').addEventListener('click', ()=>{
+      labels = genLabels(POINTS);
+      traffic = generateTrafficPoints(POINTS, 120, 45);
+      [cpuRows, memRows, ioRows] = generateResource(POINTS);
+      loadDist = generateLoadDistribution();
+
+      chartTraffic.data.labels = labels;
+      chartTraffic.data.datasets[0].data = traffic;
+      chartTraffic.update();
+
+      chartResource.data.labels = labels;
+      chartResource.data.datasets[0].data = cpuRows;
+      chartResource.data.datasets[1].data = memRows;
+      chartResource.data.datasets[2].data = ioRows;
+      chartResource.update();
+
+      chartLoad.data.datasets[0].data = loadDist;
+      chartLoad.update();
+    });
+
+    // Penjelasan singkat (console) — berguna saat demo / testing
+    // Catatan akademis: Metrik ini merepresentasikan apa yang biasanya dikumpulkan oleh observability stack (metrics, logs, traces).
+    console.log("Dashboard simulasi siap. Semua pemrosesan data di browser (client-side).");
+  </script>
+
+  <!-- Bootstrap JS (optional for components) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
